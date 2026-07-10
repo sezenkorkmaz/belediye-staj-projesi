@@ -1,22 +1,17 @@
-"""
-URL configuration for izin_takip project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
+from personel import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.giris, name='giris'),
+    path('giris/', views.giris, name='giris'),
+    path('cikis/', views.cikis, name='cikis'),
+    path('panel/', views.panel, name='panel'),
+    path('personel-panel/', views.personel_panel, name='personel_panel'),
+    path('amir-panel/', views.amir_panel, name='amir_panel'),
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('izin-talebi-olustur/', views.izin_talebi_olustur, name='izin_talebi_olustur'),
+    path('talep-guncelle/<int:talep_id>/', views.talep_guncelle, name='talep_guncelle'),
+    path('bildirim-oku/<int:bildirim_id>/', views.bildirim_oku, name='bildirim_oku'),
 ]

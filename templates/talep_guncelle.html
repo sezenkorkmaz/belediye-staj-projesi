@@ -1,0 +1,44 @@
+{% extends 'temel.html' %}
+
+{% block baslik %}Talep İncele{% endblock %}
+
+{% block icerik %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h5 class="mb-4"><i class="fas fa-edit me-2"></i>İzin Talebini İncele</h5>
+            
+            <div class="alert alert-info">
+                <p><strong>Personel:</strong> {{ talep.personel.get_full_name }}</p>
+                <p><strong>Departman:</strong> {{ talep.personel.departman|default:"-" }}</p>
+                <p><strong>İzin Türü:</strong> {{ talep.get_izin_turu_display }}</p>
+                <p><strong>Başlangıç:</strong> {{ talep.baslangic_tarihi }}</p>
+                <p><strong>Bitiş:</strong> {{ talep.bitis_tarihi }}</p>
+                <p><strong>Gün Sayısı:</strong> {{ talep.gun_sayisi }} gün</p>
+                <p class="mb-0"><strong>Açıklama:</strong> {{ talep.aciklama|default:"-" }}</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Karar</label>
+                    <select name="durum" class="form-select" required>
+                        <option value="onaylandi">Onayla</option>
+                        <option value="reddedildi">Reddet</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Amir Notu (İsteğe bağlı)</label>
+                    <textarea name="amir_notu" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-2"></i>Kaydet
+                    </button>
+                    <a href="/amir-panel/" class="btn btn-secondary">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

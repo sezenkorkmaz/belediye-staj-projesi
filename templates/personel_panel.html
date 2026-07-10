@@ -1,0 +1,79 @@
+{% extends 'temel.html' %}
+
+{% block baslik %}Personel Paneli{% endblock %}
+
+{% block icerik %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fas fa-user me-2"></i>Hoş Geldiniz, {{ user.get_full_name }}</h4>
+    <a href="/izin-talebi-olustur/" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Yeni İzin Talebi
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="text-warning">{{ talepler|length }}</h2>
+            <p class="text-muted mb-0">Toplam Talep</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="text-success">
+                {{ talepler|dictsort:"durum"|length }}
+            </h2>
+            <p class="text-muted mb-0">Onaylanan</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="text-danger">{{ bildirimler.count }}</h2>
+            <p class="text-muted mb-0">Okunmamış Bildirim</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>İzin Taleplerim</h5>
+    </div>
+    <div class="card-body">
+        {% if talepler %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>İzin Türü</th>
+                    <th>Başlangıç</th>
+                    <th>Bitiş</th>
+                    <th>Gün Sayısı</th>
+                    <th>Durum</th>
+                    <th>Amir Notu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for talep in talepler %}
+                <tr>
+                    <td>{{ talep.get_izin_turu_display }}</td>
+                    <td>{{ talep.baslangic_tarihi }}</td>
+                    <td>{{ talep.bitis_tarihi }}</td>
+                    <td>{{ talep.gun_sayisi }} gün</td>
+                    <td>
+                        {% if talep.durum == 'onaylandi' %}
+                        <span class="badge bg-success">Onaylandı</span>
+                        {% elif talep.durum == 'reddedildi' %}
+                        <span class="badge bg-danger">Reddedildi</span>
+                        {% else %}
+                        <span class="badge bg-warning">Beklemede</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ talep.amir_notu|default:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted text-center">Henüz izin talebiniz bulunmamaktadır.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

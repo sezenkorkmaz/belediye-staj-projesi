@@ -1,0 +1,51 @@
+{% extends 'temel.html' %}
+
+{% block baslik %}Amir Paneli{% endblock %}
+
+{% block icerik %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fas fa-tasks me-2"></i>Bekleyen İzin Talepleri</h4>
+    <span class="badge bg-warning fs-6">{{ bekleyen|length }} bekleyen talep</span>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if bekleyen %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Personel</th>
+                    <th>Departman</th>
+                    <th>İzin Türü</th>
+                    <th>Başlangıç</th>
+                    <th>Bitiş</th>
+                    <th>Gün</th>
+                    <th>Açıklama</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for talep in bekleyen %}
+                <tr>
+                    <td>{{ talep.personel.get_full_name }}</td>
+                    <td>{{ talep.personel.departman|default:"-" }}</td>
+                    <td>{{ talep.get_izin_turu_display }}</td>
+                    <td>{{ talep.baslangic_tarihi }}</td>
+                    <td>{{ talep.bitis_tarihi }}</td>
+                    <td>{{ talep.gun_sayisi }} gün</td>
+                    <td>{{ talep.aciklama|default:"-" }}</td>
+                    <td>
+                        <a href="/talep-guncelle/{{ talep.id }}/" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i> İncele
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted text-center">Bekleyen izin talebi bulunmamaktadır.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
