@@ -105,9 +105,26 @@ def talep_guncelle(request, talep_id):
         return redirect('amir_panel')
     return render(request, 'talep_guncelle.html', {'talep': talep})
 
+
+@login_required
+def bildirimler(request):
+    tum_bildirimler = Bildirim.objects.filter(kullanici=request.user).order_by('-olusturma_tarihi')
+    okunmamis = Bildirim.objects.filter(kullanici=request.user, okundu=False)
+    return render(request, 'bildirimler.html', {
+        'tum_bildirimler': tum_bildirimler,
+        'bildirimler': okunmamis,
+    })
+
+
 @login_required
 def bildirim_oku(request, bildirim_id):
     bildirim = get_object_or_404(Bildirim, id=bildirim_id, kullanici=request.user)
     bildirim.okundu = True
     bildirim.save()
-    return redirect('panel')
+    return redirect('bildirimler')
+
+
+@login_required
+def tum_bildirimleri_oku(request):
+    Bildirim.objects.filter(kullanici=request.user, okundu=False).update(okundu=True)
+    return redirect('bildirimler')

@@ -13,5 +13,7 @@ urlpatterns = [
     path('admin-panel/', views.admin_panel, name='admin_panel'),
     path('izin-talebi-olustur/', views.izin_talebi_olustur, name='izin_talebi_olustur'),
     path('talep-guncelle/<int:talep_id>/', views.talep_guncelle, name='talep_guncelle'),
+    path('bildirimler/', views.bildirimler, name='bildirimler'),
     path('bildirim-oku/<int:bildirim_id>/', views.bildirim_oku, name='bildirim_oku'),
+    path('tum-bildirimleri-oku/', views.tum_bildirimleri_oku, name='tum_bildirimleri_oku'),
 ]

@@ -45,7 +45,7 @@
             <i class="fas fa-building"></i> Adana Büyükşehir Belediyesi
         </a>
         <div class="ms-auto d-flex align-items-center">
-            <a href="#" class="nav-link bildirim-zil me-3">
+            <a href="/bildirimler/" class="nav-link bildirim-zil me-3">
                 <i class="fas fa-bell text-white"></i>
                 {% if bildirimler %}
                 <span class="bildirim-sayi">{{ bildirimler.count }}</span>
@@ -67,10 +67,13 @@
                 {% if user.rol == 'personel' %}
                 <a href="/izin-talebi-olustur/"><i class="fas fa-plus me-2"></i>Yeni Talep</a>
                 <a href="/personel-panel/"><i class="fas fa-list me-2"></i>Taleplerim</a>
+                <a href="/bildirimler/"><i class="fas fa-bell me-2"></i>Bildirimler</a>
                 {% elif user.rol == 'amir' %}
                 <a href="/amir-panel/"><i class="fas fa-tasks me-2"></i>Bekleyen Talepler</a>
+                <a href="/bildirimler/"><i class="fas fa-bell me-2"></i>Bildirimler</a>
                 {% elif user.rol == 'admin' %}
                 <a href="/admin-panel/"><i class="fas fa-cog me-2"></i>Yönetim Paneli</a>
+                <a href="/bildirimler/"><i class="fas fa-bell me-2"></i>Bildirimler</a>
                 <a href="/admin/"><i class="fas fa-database me-2"></i>Veritabanı</a>
                 {% endif %}
             </div>
