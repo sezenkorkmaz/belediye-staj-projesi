@@ -10,6 +10,17 @@ class Kullanici(AbstractUser):
     rol = models.CharField(max_length=20, choices=ROLLER, default='personel')
     departman = models.CharField(max_length=100, blank=True)
     telefon = models.CharField(max_length=20, blank=True)
+    yillik_izin_hakki = models.IntegerField(default=14)
+
+    def kullanilan_izin(self):
+        talepler = self.izin_talepleri.filter(
+            durum='onaylandi',
+            izin_turu='yillik'
+        )
+        return sum(t.gun_sayisi() for t in talepler)
+
+    def kalan_izin(self):
+        return self.yillik_izin_hakki - self.kullanilan_izin()
 
     def __str__(self):
         return f"{self.get_full_name()} ({self.get_rol_display()})"

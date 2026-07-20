@@ -11,24 +11,28 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="card text-center p-3">
+            <h2 class="text-primary">{{ user.yillik_izin_hakki }}</h2>
+            <p class="text-muted mb-0">Toplam İzin Hakkı</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3">
+            <h2 class="text-danger">{{ user.kullanilan_izin }}</h2>
+            <p class="text-muted mb-0">Kullanılan İzin</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3">
+            <h2 class="text-success">{{ user.kalan_izin }}</h2>
+            <p class="text-muted mb-0">Kalan İzin</p>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="card text-center p-3">
             <h2 class="text-warning">{{ talepler|length }}</h2>
             <p class="text-muted mb-0">Toplam Talep</p>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center p-3">
-            <h2 class="text-success">
-                {{ talepler|dictsort:"durum"|length }}
-            </h2>
-            <p class="text-muted mb-0">Onaylanan</p>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center p-3">
-            <h2 class="text-danger">{{ bildirimler.count }}</h2>
-            <p class="text-muted mb-0">Okunmamış Bildirim</p>
         </div>
     </div>
 </div>
