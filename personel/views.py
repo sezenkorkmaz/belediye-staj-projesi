@@ -105,7 +105,6 @@ def talep_guncelle(request, talep_id):
         return redirect('amir_panel')
     return render(request, 'talep_guncelle.html', {'talep': talep})
 
-
 @login_required
 def bildirim_oku(request, bildirim_id):
     bildirim = get_object_or_404(Bildirim, id=bildirim_id, kullanici=request.user)
