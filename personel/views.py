@@ -72,6 +72,41 @@ def admin_panel(request):
 
 
 @login_required
+def kullanici_ekle(request):
+    if request.user.rol != 'admin':
+        return redirect('panel')
+    if request.method == 'POST':
+        kullanici_adi = request.POST['kullanici_adi']
+        sifre = request.POST['sifre']
+        ad = request.POST['ad']
+        soyad = request.POST['soyad']
+        email = request.POST.get('email', '')
+        rol = request.POST['rol']
+        departman = request.POST.get('departman', '')
+        telefon = request.POST.get('telefon', '')
+        yillik_izin = request.POST.get('yillik_izin_hakki', 14)
+
+        if Kullanici.objects.filter(username=kullanici_adi).exists():
+            messages.error(request, 'Bu kullanıcı adı zaten kullanılıyor!')
+            return render(request, 'kullanici_ekle.html')
+
+        kullanici = Kullanici.objects.create_user(
+            username=kullanici_adi,
+            password=sifre,
+            first_name=ad,
+            last_name=soyad,
+            email=email,
+            rol=rol,
+            departman=departman,
+            telefon=telefon,
+            yillik_izin_hakki=yillik_izin,
+        )
+        messages.success(request, f'{ad} {soyad} başarıyla eklendi!')
+        return redirect('admin_panel')
+    return render(request, 'kullanici_ekle.html')
+
+
+@login_required
 def izin_talebi_olustur(request):
     if request.method == 'POST':
         izin_turu = request.POST['izin_turu']

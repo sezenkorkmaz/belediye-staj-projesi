@@ -11,6 +11,7 @@ urlpatterns = [
     path('personel-panel/', views.personel_panel, name='personel_panel'),
     path('amir-panel/', views.amir_panel, name='amir_panel'),
     path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('kullanici-ekle/', views.kullanici_ekle, name='kullanici_ekle'),
     path('izin-talebi-olustur/', views.izin_talebi_olustur, name='izin_talebi_olustur'),
     path('talep-guncelle/<int:talep_id>/', views.talep_guncelle, name='talep_guncelle'),
     path('bildirimler/', views.bildirimler, name='bildirimler'),
