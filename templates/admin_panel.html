@@ -22,16 +22,29 @@
     </div>
     <div class="col-md-3">
         <div class="card text-center p-3">
-            <h2 class="text-success">
-                {{ tum_talepler|dictsort:"durum"|length }}
-            </h2>
+            <h2 class="text-success">{{ onaylanan }}</h2>
             <p class="text-muted mb-0">Onaylanan</p>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-center p-3">
-            <h2 class="text-danger">{{ bildirimler.count }}</h2>
-            <p class="text-muted mb-0">Okunmamış Bildirim</p>
+            <h2 class="text-danger">{{ reddedilen }}</h2>
+            <p class="text-muted mb-0">Reddedilen</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5 class="mb-3"><i class="fas fa-chart-pie me-2"></i>Talep Durumu</h5>
+            <canvas id="durumGrafik"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>İzin Türlerine Göre</h5>
+            <canvas id="turGrafik"></canvas>
         </div>
     </div>
 </div>
@@ -81,4 +94,34 @@
         {% endif %}
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const durumCtx = document.getElementById('durumGrafik').getContext('2d');
+    new Chart(durumCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Onaylandı', 'Reddedildi', 'Beklemede'],
+            datasets: [{
+                data: [{{ onaylanan }}, {{ reddedilen }}, {{ beklemede }}],
+                backgroundColor: ['#2ecc71', '#e74c3c', '#f39c12'],
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    const turCtx = document.getElementById('turGrafik').getContext('2d');
+    new Chart(turCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Yıllık', 'Hastalık', 'Mazeret', 'Ücretsiz'],
+            datasets: [{
+                label: 'Talep Sayısı',
+                data: [{{ yillik }}, {{ hastalik }}, {{ mazeret }}, {{ ucretsiz }}],
+                backgroundColor: ['#3498db', '#e74c3c', '#f39c12', '#9b59b6'],
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+</script>
 {% endblock %}

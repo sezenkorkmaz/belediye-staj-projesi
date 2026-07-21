@@ -64,10 +64,24 @@ def admin_panel(request):
     tum_talepler = IzinTalebi.objects.all().order_by('-olusturma_tarihi')
     tum_kullanicilar = Kullanici.objects.all()
     bildirimler = Bildirim.objects.filter(kullanici=request.user, okundu=False)
+    onaylanan = tum_talepler.filter(durum='onaylandi').count()
+    reddedilen = tum_talepler.filter(durum='reddedildi').count()
+    beklemede = tum_talepler.filter(durum='beklemede').count()
+    yillik = tum_talepler.filter(izin_turu='yillik').count()
+    hastalik = tum_talepler.filter(izin_turu='hastalik').count()
+    mazeret = tum_talepler.filter(izin_turu='mazeret').count()
+    ucretsiz = tum_talepler.filter(izin_turu='ucretsiz').count()
     return render(request, 'admin_panel.html', {
         'tum_talepler': tum_talepler,
         'tum_kullanicilar': tum_kullanicilar,
         'bildirimler': bildirimler,
+        'onaylanan': onaylanan,
+        'reddedilen': reddedilen,
+        'beklemede': beklemede,
+        'yillik': yillik,
+        'hastalik': hastalik,
+        'mazeret': mazeret,
+        'ucretsiz': ucretsiz,
     })
 
 
