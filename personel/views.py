@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Kullanici, IzinTalebi, Bildirim
 from datetime import date
 
@@ -97,11 +99,31 @@ def talep_guncelle(request, talep_id):
         talep.durum = durum
         talep.amir_notu = amir_notu
         talep.save()
+
         Bildirim.objects.create(
             kullanici=talep.personel,
             mesaj=f'İzin talebiniz {talep.get_durum_display()} olarak güncellendi.',
         )
-        messages.success(request, 'Talep güncellendi!')
+
+        if talep.personel.email:
+            try:
+                send_mail(
+                    subject='İzin Talebi Güncellendi',
+                    message=f'Sayın {talep.personel.get_full_name()},\n\n'
+                            f'İzin talebiniz {talep.get_durum_display()} olarak güncellendi.\n\n'
+                            f'İzin Türü: {talep.get_izin_turu_display()}\n'
+                            f'Başlangıç: {talep.baslangic_tarihi}\n'
+                            f'Bitiş: {talep.bitis_tarihi}\n'
+                            f'Amir Notu: {talep.amir_notu or "-"}\n\n'
+                            f'Adana Büyükşehir Belediyesi Personel İzin Takip Sistemi',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[talep.personel.email],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                pass
+
+        messages.success(request, 'Talep güncellendi ve personele bildirim gönderildi!')
         return redirect('amir_panel')
     return render(request, 'talep_guncelle.html', {'talep': talep})
 

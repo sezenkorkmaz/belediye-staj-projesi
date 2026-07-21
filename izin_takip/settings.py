@@ -75,5 +75,12 @@ LOGIN_URL = '/giris/'
 LOGIN_REDIRECT_URL = '/panel/'
 LOGOUT_REDIRECT_URL = '/giris/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = 'personel.Kullanici'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sezenkkorkmazz@gmail.com'
+EMAIL_HOST_PASSWORD = 'ocwf enpo psjo wrur'
+DEFAULT_FROM_EMAIL = 'Adana Belediyesi İzin Sistemi <sezenkkorkmazz@gmail.com>'
