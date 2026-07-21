@@ -82,5 +82,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sezenkkorkmazz@gmail.com'
-EMAIL_HOST_PASSWORD = 'ocwf enpo psjo wrur'
+EMAIL_HOST_PASSWORD = 'riwb ftzv clrw ywdo'
 DEFAULT_FROM_EMAIL = 'Adana Belediyesi İzin Sistemi <sezenkkorkmazz@gmail.com>'
