@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Kullanici, IzinTalebi, Bildirim
-from datetime import date
+from datetime import date, datetime
 
 
 def giris(request):
@@ -127,14 +127,36 @@ def izin_talebi_olustur(request):
         baslangic = request.POST['baslangic_tarihi']
         bitis = request.POST['bitis_tarihi']
         aciklama = request.POST.get('aciklama', '')
+
+        baslangic_tarihi = datetime.strptime(baslangic, '%Y-%m-%d').date()
+        bitis_tarihi = datetime.strptime(bitis, '%Y-%m-%d').date()
+        bugun = date.today()
+
+        if baslangic_tarihi < bugun:
+            messages.error(request, 'Başlangıç tarihi geçmiş bir tarih olamaz!')
+            return render(request, 'izin_talebi_olustur.html')
+
+        if bitis_tarihi < baslangic_tarihi:
+            messages.error(request, 'Bitiş tarihi başlangıç tarihinden önce olamaz!')
+            return render(request, 'izin_talebi_olustur.html')
+
+        if request.user.kalan_izin() <= 0 and izin_turu == 'yillik':
+            messages.error(request, 'Yıllık izin hakkınız kalmamıştır!')
+            return render(request, 'izin_talebi_olustur.html')
+
+        gun_sayisi = (bitis_tarihi - baslangic_tarihi).days + 1
+        if izin_turu == 'yillik' and gun_sayisi > request.user.kalan_izin():
+            messages.error(request, f'Sadece {request.user.kalan_izin()} gün izin hakkınız kalmıştır!')
+            return render(request, 'izin_talebi_olustur.html')
+
         talep = IzinTalebi.objects.create(
             personel=request.user,
             izin_turu=izin_turu,
-            baslangic_tarihi=baslangic,
-            bitis_tarihi=bitis,
+            baslangic_tarihi=baslangic_tarihi,
+            bitis_tarihi=bitis_tarihi,
             aciklama=aciklama,
         )
-        messages.success(request, 'İzin talebiniz oluşturuldu!')
+        messages.success(request, 'İzin talebiniz başarıyla oluşturuldu!')
         return redirect('personel_panel')
     return render(request, 'izin_talebi_olustur.html')
 
