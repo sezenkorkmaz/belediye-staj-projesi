@@ -1,0 +1,1 @@
+web: gunicorn izin_takip.wsgi
