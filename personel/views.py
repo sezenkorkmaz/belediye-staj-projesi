@@ -41,6 +41,9 @@ def panel(request):
 
 @login_required
 def personel_panel(request):
+    if request.user.rol not in ['personel', 'admin']:
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok!')
+        return redirect('panel')
     talepler = IzinTalebi.objects.filter(personel=request.user).order_by('-olusturma_tarihi')
     bildirimler = Bildirim.objects.filter(kullanici=request.user, okundu=False)
     return render(request, 'personel_panel.html', {
@@ -51,6 +54,9 @@ def personel_panel(request):
 
 @login_required
 def amir_panel(request):
+    if request.user.rol not in ['amir', 'admin']:
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok!')
+        return redirect('panel')
     bekleyen = IzinTalebi.objects.filter(durum='beklemede').order_by('-olusturma_tarihi')
     bildirimler = Bildirim.objects.filter(kullanici=request.user, okundu=False)
     return render(request, 'amir_panel.html', {
@@ -61,6 +67,9 @@ def amir_panel(request):
 
 @login_required
 def admin_panel(request):
+    if request.user.rol != 'admin':
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok!')
+        return redirect('panel')
     tum_talepler = IzinTalebi.objects.all().order_by('-olusturma_tarihi')
     tum_kullanicilar = Kullanici.objects.all()
     bildirimler = Bildirim.objects.filter(kullanici=request.user, okundu=False)
@@ -88,6 +97,7 @@ def admin_panel(request):
 @login_required
 def kullanici_ekle(request):
     if request.user.rol != 'admin':
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok!')
         return redirect('panel')
     if request.method == 'POST':
         kullanici_adi = request.POST['kullanici_adi']
@@ -122,6 +132,9 @@ def kullanici_ekle(request):
 
 @login_required
 def izin_talebi_olustur(request):
+    if request.user.rol != 'personel':
+        messages.error(request, 'Sadece personel rolündeki kullanıcılar izin talebi oluşturabilir!')
+        return redirect('panel')
     if request.method == 'POST':
         izin_turu = request.POST['izin_turu']
         baslangic = request.POST['baslangic_tarihi']
@@ -163,6 +176,9 @@ def izin_talebi_olustur(request):
 
 @login_required
 def talep_guncelle(request, talep_id):
+    if request.user.rol not in ['amir', 'admin']:
+        messages.error(request, 'Bu işlem için yetkiniz yok!')
+        return redirect('panel')
     talep = get_object_or_404(IzinTalebi, id=talep_id)
     if request.method == 'POST':
         durum = request.POST['durum']
